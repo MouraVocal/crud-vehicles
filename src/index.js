@@ -6,7 +6,7 @@ const fs = require('fs');
 
 const app = express();
 
-app.listen(3000);
+app.listen(3333);
 app.use(express.json());
 
 // Checking if file exists
@@ -50,10 +50,10 @@ app.get('/vehicles', (req, res) => {
 // Post new vehicles
 app.post('/vehicles', (req, res) => {
   const {
-    placa, chassi, renavam, modelo, marca, ano,
+    id, placa, chassi, renavam, modelo, marca, ano,
   } = req.body;
   const vehicle = {
-    id: uuidv4(), placa, chassi, renavam, modelo, marca, ano,
+    id: id || uuidv4(), placa, chassi, renavam, modelo, marca, ano,
   };
   obj.vehicles.push(vehicle);
   return res.json(vehicle);
@@ -92,3 +92,5 @@ app.delete('/vehicles/:id', (req, res) => {
 
   return res.status(204).send();
 });
+
+module.exports = app;
