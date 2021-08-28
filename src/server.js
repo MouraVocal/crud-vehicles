@@ -1,12 +1,21 @@
 /* eslint-disable no-console */
 /* eslint-disable no-shadow */
 const express = require('express');
+const cors = require('cors');
 const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 
 const app = express();
 
 app.listen(3333);
+app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.removeHeader('x-powered-by');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
 app.use(express.json());
 
 // Checking if file exists
@@ -44,7 +53,11 @@ app.use(updateFile);
 
 // Get vehicles list
 app.get('/vehicles', (req, res) => {
-  res.json(obj.vehicles);
+  const { id } = req.query;
+
+  const results = id ? obj.vehicles.filter((vehicle) => vehicle.id.includes(id)) : obj.vehicles;
+
+  res.json(results);
 });
 
 // Post new vehicles

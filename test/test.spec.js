@@ -3,7 +3,7 @@ const { describe, it } = require('mocha');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
-const app = require('../src/index');
+const app = require('../src/server');
 
 chai.use(chaiHttp);
 
@@ -66,11 +66,12 @@ describe('DELETE tests', () => {
       });
   });
 
-  it('item with id=test should not exist', (done) => {
+  it('item with id = test should not exist', (done) => {
     chai.request(app)
-      .get('/vehicles/test')
+      .get('/vehicles/?id=test')
       .end((err, res) => {
-        chai.expect(res).to.have.status(404);
+        chai.expect(res).to.have.status(200);
+        chai.expect(res.body).length(0);
         done();
       });
   });
